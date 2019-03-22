@@ -36,7 +36,7 @@ RUN set -x \
     && (gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys F1182E81C792928921DBCAB4CFCA4A29D26468DE \
 	    || gpg --batch --keyserver ipv4.pool.sks-keyservers.net --recv-keys F1182E81C792928921DBCAB4CFCA4A29D26468DE) \
     && cd /opt \
-    && curl -o sonarqube.zip -fSL https://binaries.sonarsource.com/CommercialDistribution/sonarqube-$SONAR_EDITION/sonarqube-SONAR_EDITION-$SONAR_VERSION.zip \
+    && curl -o sonarqube.zip -fSL https://binaries.sonarsource.com/CommercialDistribution/sonarqube-$SONAR_EDITION/sonarqube-$SONAR_EDITION-$SONAR_VERSION.zip \
     && curl -o sonarqube.zip.asc -fSL https://binaries.sonarsource.com/CommercialDistribution/sonarqube-$SONAR_EDITION/sonarqube-$SONAR_EDITION-$SONAR_VERSION.zip.asc \
     && gpg --batch --verify sonarqube.zip.asc sonarqube.zip \
     && unzip sonarqube.zip \
