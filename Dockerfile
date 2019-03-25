@@ -14,6 +14,8 @@ ENV SONAR_VERSION=7.7 \
 # Http port
 EXPOSE 9000
 
+RUN chmod +x run.sh
+
 RUN groupadd -r sonarqube && useradd -r -g sonarqube sonarqube
 
 # grab gosu for easy step-down from root
@@ -50,6 +52,5 @@ VOLUME "$SONARQUBE_HOME/data"
 WORKDIR $SONARQUBE_HOME
 COPY run.sh $SONARQUBE_HOME/bin/
 USER sonarqube
-RUN set -x \
-    && sudo chmod +x ./bin/run.sh
+RUN set -x chmod +x $SONARQUBE_HOME/bin/
 ENTRYPOINT ["./bin/run.sh"]
