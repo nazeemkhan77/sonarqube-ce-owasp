@@ -51,5 +51,5 @@ WORKDIR $SONARQUBE_HOME
 COPY run.sh $SONARQUBE_HOME/bin/
 USER sonarqube
 RUN set -x \
-    && chmod +x ./bin/run.sh
+    && sudo chmod +x ./bin/run.sh
 ENTRYPOINT ["./bin/run.sh"]
