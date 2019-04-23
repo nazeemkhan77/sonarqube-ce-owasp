@@ -3,13 +3,17 @@ FROM openjdk:8
 ENV SONAR_VERSION=7.7 \
 	SONAR_EDITION=developer \
     SONARQUBE_HOME=/opt/sonarqube \
+    SQ_DPCHECK_VERSION=1.2.3 \
+    SQ_OIDC_VERSION=1.0.4 \
+    SQ_BITBUCKET_AUTH_VERSION=1.0 \
+    SQ_BITBUCKET_VERSION=1.2.1 \
     # Database configuration
     # Defaults to using H2
     # DEPRECATED. Use -v sonar.jdbc.username=... instead
     # Drop these in the next release, also in the run script
     SONARQUBE_JDBC_USERNAME=sonar \
     SONARQUBE_JDBC_PASSWORD=sonar \
-    SONARQUBE_JDBC_URL=
+    SONARQUBE_JDBC_URL= 
 
 # Http port
 EXPOSE 9000
@@ -43,6 +47,11 @@ RUN set -x \
     && mv sonarqube-$SONAR_VERSION sonarqube \
     && chown -R sonarqube:sonarqube sonarqube \
     && rm sonarqube.zip* \
+    && cd  $SONARQUBE_HOME/extensions/plugins/ \
+    && wget --no-verbose https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/releases/download/$SQ_DPCHECK_VERSION/sonar-dependency-check-plugin-$SQ_DPCHECK_VERSION.jar \
+    && wget --no-verbose https://github.com/vaulttec/sonar-auth-oidc/releases/download/v$SQ_OIDC_VERSION/sonar-auth-oidc-plugin-$SQ_OIDC_VERSION.jar \
+    && wget --no-verbose https://github.com/SonarSource/sonar-auth-bitbucket/releases/download/$SQ_BITBUCKET_AUTH_VERSION/sonar-auth-bitbucket-plugin-$SQ_BITBUCKET_AUTH_VERSION.jar \
+    && wget --no-verbose https://github.com/mibexsoftware/sonar-bitbucket-plugin/releases/download/v$SQ_BITBUCKET_VERSION/sonar-bitbucket-plugin-$SQ_BITBUCKET_VERSION.jar \
     && rm -rf $SONARQUBE_HOME/bin/*
 
 VOLUME "$SONARQUBE_HOME/data"
