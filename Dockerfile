@@ -25,6 +25,10 @@ ENV SONAR_VERSION=7.6 \
     SONARQUBE_JDBC_PASSWORD=sonar \
     SONARQUBE_JDBC_URL=
 
+RUN apk add --update \
+    curl \
+    && rm -rf /var/cache/apk/*
+
 # Http port
 EXPOSE 9000
 
