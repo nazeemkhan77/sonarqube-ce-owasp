@@ -18,6 +18,7 @@ ENV SONAR_VERSION=7.6 \
     SQ_DPCHECK_VERSION=1.2.3 \
     SQ_OIDC_VERSION=1.0.4 \
     SQ_CITY_VERSION=1.0.1 \
+    SH_DPCHECK_VERSION=4.0.2 \
     # Database configuration
     # Defaults to using H2
     SONARQUBE_JDBC_USERNAME=sonar \
@@ -63,7 +64,14 @@ RUN set -x \
     && wget --no-verbose https://github.com/SonarSecurityCommunity/dependency-check-sonar-plugin/releases/download/$SQ_DPCHECK_VERSION/sonar-dependency-check-plugin-$SQ_DPCHECK_VERSION.jar \
     && wget --no-verbose https://github.com/vaulttec/sonar-auth-oidc/releases/download/v$SQ_OIDC_VERSION/sonar-auth-oidc-plugin-$SQ_OIDC_VERSION.jar \
     && wget --no-verbose https://github.com/stefanrinderle/softvis3d/releases/download/softvis3d-$SQ_CITY_VERSION/sonar-softvis3d-plugin-$SQ_CITY_VERSION.jar \
-    && rm -rf $SONARQUBE_HOME/bin/*
+    && rm -rf $SONARQUBE_HOME/bin/* \
+    && wget -O dependency-check.zip --no-verbose http://dl.bintray.com/jeremy-long/owasp/:dependency-check-$SH_DPCHECK_VERSION-release.zip \
+    && wget -O dependency-check.zip.asc --no-verbose http://dl.bintray.com/jeremy-long/owasp/:dependency-check-$SH_DPCHECK_VERSION-release.zip.asc \
+    && gpg --batch --verify dependency-check.zip.asc dependency-check.zip \
+    && unzip dependency-check.zip \
+    && mv dependency-check /usr/local/bin/dependency-check \
+    && chown -R `whoami` /usr/local/bin/dependency-check \
+    && rm dependency-check.zip*
 
 VOLUME "$SONARQUBE_HOME/data"
 
@@ -74,5 +82,7 @@ RUN dos2unix $SONARQUBE_HOME/bin/run.sh && chmod +x $SONARQUBE_HOME/bin/run.sh
 RUN chmod -R 777 $SONARQUBE_HOME
 RUN chown -R sonarqube:sonarqube $SONARQUBE_HOME
 USER sonarqube
+
+RUN chmod -R 777 /usr/local/bin/dependency-check && dependency-check.sh --version
 
 ENTRYPOINT ["./bin/run.sh"]
