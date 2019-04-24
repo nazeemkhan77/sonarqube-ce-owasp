@@ -25,10 +25,6 @@ ENV SONAR_VERSION=7.6 \
     SONARQUBE_JDBC_PASSWORD=sonar \
     SONARQUBE_JDBC_URL=
 
-RUN apk add --update \
-    curl \
-    && rm -rf /var/cache/apk/*
-
 # Http port
 EXPOSE 9000
 
@@ -39,6 +35,7 @@ RUN set -x \
     && apk add --no-cache libressl wget \
     && apk add --no-cache su-exec \
     && apk add --no-cache bash \
+    && apk add --no-cache curl \
     && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys F1182E81C792928921DBCAB4CFCA4A29D26468DE \
     && rm -rf /opt \
     && mkdir /opt \
