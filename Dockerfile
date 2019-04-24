@@ -67,7 +67,7 @@ RUN set -x \
     && wget --no-verbose https://github.com/stefanrinderle/softvis3d/releases/download/softvis3d-$SQ_CITY_VERSION/sonar-softvis3d-plugin-$SQ_CITY_VERSION.jar \
     && rm -rf $SONARQUBE_HOME/bin/* \
     && curl -L -s -o dependency-check.zip http://dl.bintray.com/jeremy-long/owasp/:dependency-check-$SH_DPCHECK_VERSION-release.zip \
-    && wget -O dependency-check.zip.asc --no-verbose http://dl.bintray.com/jeremy-long/owasp/:dependency-check-$SH_DPCHECK_VERSION-release.zip.asc \
+    && wget -O dependency-check.zip.asc --no-verbose http://dl.bintray.com/jeremy-long/owasp/dependency-check-$SH_DPCHECK_VERSION-release.zip.asc \
     && gpg --batch --verify dependency-check.zip.asc dependency-check.zip \
     && unzip dependency-check.zip \
     && mv dependency-check /usr/local/bin/dependency-check \
