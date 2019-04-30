@@ -28,7 +28,7 @@ ENV SONAR_VERSION=7.6 \
 # Http port
 EXPOSE 9000
 
-RUN addgroup -S sonarqube && adduser -S -G sonarqube sonarqube
+#RUN addgroup -S sonarqube && adduser -S -G sonarqube sonarqube
 
 RUN set -x \
     && apk add --no-cache gnupg unzip \
@@ -45,7 +45,6 @@ RUN set -x \
     && gpg --batch --verify sonarqube.zip.asc sonarqube.zip \
     && unzip sonarqube.zip \
     && mv sonarqube-$SONAR_VERSION sonarqube \
-    && chown -R sonarqube:sonarqube sonarqube \
     && rm sonarqube.zip* \
     && rm -rf $SONARQUBE_HOME/extensions/plugins/* \
     && cd  $SONARQUBE_HOME/extensions/plugins/ \
@@ -71,7 +70,6 @@ RUN set -x \
     && gpg --batch --verify dependency-check.zip.asc dependency-check.zip \
     && unzip dependency-check.zip \
     && mv dependency-check /usr/local/bin/dependency-check \
-    && chown -R `whoami` /usr/local/bin/dependency-check \
     && rm dependency-check.zip*
 
 VOLUME "$SONARQUBE_HOME/data"
@@ -81,8 +79,8 @@ COPY run.sh $SONARQUBE_HOME/bin/
 RUN dos2unix $SONARQUBE_HOME/bin/run.sh && chmod +x $SONARQUBE_HOME/bin/run.sh
 
 RUN chmod -R 777 $SONARQUBE_HOME
-RUN chown -R sonarqube:sonarqube $SONARQUBE_HOME
-USER sonarqube
+#RUN chown -R sonarqube:sonarqube $SONARQUBE_HOME
+#USER sonarqube
 
 RUN chmod -R 777 /usr/local/bin/dependency-check && dependency-check.sh --version
 
